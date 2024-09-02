@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "neoclear",
+  "version": "${version}",
+
+  "name": "NeoClear",
+  "description": "A mod made to clear specified entities on asynchronous timers.",
+  "authors": [
+    "Neovitalism"
+  ],
+  "contact": {
+    "homepage": "https://discord.gg/fQXCccxMrD"
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.neovitalism.neoclear.NeoClear"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "neoapi": ">=1.4.7"
+  },
+
+  "suggests": {
+    "luckperms": ">=5.4.67"
+  }
+}

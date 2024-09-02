@@ -1,0 +1,58 @@
+plugins {
+    id 'fabric-loom' version '1.0-SNAPSHOT'
+    id 'maven-publish'
+    id 'org.jetbrains.kotlin.jvm' version "1.8.10"
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = "${project.archives_base_name}"
+version = "${project.mod_version}" as String
+group = "${project.maven_group}" as String
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.impactdev.net/repository/development/' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation 'net.kyori:adventure-text-minimessage:4.13.0'
+    modImplementation 'net.kyori:adventure-platform-fabric:5.8.0'
+    modImplementation include(files("libs/NeoAPI-${project.neoapi_version}.jar"))
+    modImplementation "com.cobblemon:fabric:1.5.0+1.20.1-SNAPSHOT"
+    compileOnly 'net.luckperms:api:5.4'
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+}
+
+java {
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
+}
+
+runClient {
+    args("--username=NeoDev")
+}
+
+remapJar {
+    nestedJars.from file("libs/NeoAPI-${project.neoapi_version}.jar")
+}
