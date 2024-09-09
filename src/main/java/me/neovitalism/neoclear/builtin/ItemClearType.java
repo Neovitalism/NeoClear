@@ -1,7 +1,6 @@
 package me.neovitalism.neoclear.builtin;
 
 import me.neovitalism.neoapi.modloading.config.Configuration;
-import me.neovitalism.neoclear.NeoClear;
 import me.neovitalism.neoclear.api.cleartypes.ClearType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.registry.Registries;

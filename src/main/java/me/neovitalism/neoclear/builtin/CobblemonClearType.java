@@ -3,25 +3,37 @@ package me.neovitalism.neoclear.builtin;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import me.neovitalism.neoapi.modloading.config.Configuration;
-import me.neovitalism.neoclear.NeoClear;
 import me.neovitalism.neoclear.api.cleartypes.ClearType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.TypeFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CobblemonClearType extends ClearType<PokemonEntity> {
+    private final List<String> whitelistedTags = new ArrayList<>();
+    private final List<PokemonProperties> whitelistedSpecs = new ArrayList<>();
+
     public CobblemonClearType(Configuration config) {
         super(config);
+        for(String whitelistEntry : this.whitelist) {
+            if(whitelistEntry.contains("tag:")) {
+                String tag = whitelistEntry.replace("tag:", "");
+                this.whitelistedTags.add(tag);
+            } else {
+                PokemonProperties properties = PokemonProperties.Companion.parse(whitelistEntry, " ", "=");
+                this.whitelistedSpecs.add(properties);
+            }
+        }
     }
 
     @Override
     public boolean isWhitelisted(PokemonEntity pokemon) {
-        for(String whitelisted : this.whitelist) {
-            if(whitelisted.contains("tag:")) {
-                String tag = whitelisted.replace("tag:", "");
-                if(pokemon.getCommandTags().contains(tag)) return true;
-            } else if(PokemonProperties.Companion.parse(whitelisted, " ", "=").matches(pokemon)) return true;
+        for(String whitelistedTag : this.whitelistedTags) {
+            if(pokemon.getCommandTags().contains(whitelistedTag)) return true;
+        }
+        for(PokemonProperties spec : this.whitelistedSpecs) {
+            if(spec.matches(pokemon)) return true;
         }
         return false;
     }
