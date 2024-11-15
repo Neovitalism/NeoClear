@@ -1,9 +1,10 @@
 package me.neovitalism.neoclear.api.cleartypes;
 
-import me.neovitalism.neoapi.modloading.config.Configuration;
-import me.neovitalism.neoclear.NeoClear;
+import me.neovitalism.neoapi.NeoAPI;
+import me.neovitalism.neoapi.config.Configuration;
+import me.neovitalism.neoapi.utils.TimeUtil;
+import me.neovitalism.neoclear.managers.ScheduleManager;
 import me.neovitalism.neoclear.util.ServerUtil;
-import me.neovitalism.neoclear.util.TimeUtil;
 import net.minecraft.server.world.ServerWorld;
 
 import java.util.ArrayList;
@@ -25,21 +26,21 @@ public abstract class ClearType<T> {
     public ClearType(Configuration config) {
         this.interval = config.getLong("interval", -1);
         Configuration messageSection = config.getSection("messages");
-        if(messageSection != null) {
-            for(String key : messageSection.getKeys()) {
-                if(key.equals("on-clear")) continue;
+        if (messageSection != null) {
+            for (String key : messageSection.getKeys()) {
+                if (key.equals("on-clear")) continue;
                 long seconds = TimeUtil.tryParse(key);
-                if(seconds == -1) continue;
+                if (seconds == -1) continue;
                 this.intervalMessages.put(seconds, messageSection.getString(key));
             }
             this.clearMessage = messageSection.getString("on-clear");
         } else this.clearMessage = null;
         Configuration commandSection = config.getSection("commands");
-        if(commandSection != null) {
-            for(String key : commandSection.getKeys()) {
-                if(key.equals("on-clear")) continue;
+        if (commandSection != null) {
+            for (String key : commandSection.getKeys()) {
+                if (key.equals("on-clear")) continue;
                 long seconds = TimeUtil.tryParse(key);
-                if(seconds == -1) continue;
+                if (seconds == -1) continue;
                 this.intervalCommands.put(seconds, commandSection.getStringList(key));
             }
             this.clearCommands = commandSection.getStringList("on-clear");
@@ -54,10 +55,8 @@ public abstract class ClearType<T> {
 
     private List<ServerWorld> collectWorlds() {
         List<ServerWorld> worlds = new ArrayList<>();
-        for(ServerWorld world : NeoClear.inst().getServer().getWorlds()) {
-            if(!this.blacklistedWorlds.contains(world.getRegistryKey().getValue().toString())) {
-                worlds.add(world);
-            }
+        for (ServerWorld world : NeoAPI.getServer().getWorlds()) {
+            if (!this.blacklistedWorlds.contains(world.getRegistryKey().getValue().toString())) worlds.add(world);
         }
         return worlds;
     }
@@ -69,28 +68,28 @@ public abstract class ClearType<T> {
         replacements.put("{interval-formatted}", TimeUtil.getFormattedTime(this.interval));
         replacements.put("{amount}", String.valueOf(amountCleared));
         String clearMessage = this.clearMessage;
-        for(Map.Entry<String, String> replacement : replacements.entrySet()) {
+        for (Map.Entry<String, String> replacement : replacements.entrySet()) {
             clearMessage = clearMessage.replace(replacement.getKey(), replacement.getValue());
         }
-        ServerUtil.sendMessage(clearMessage);
+        ServerUtil.broadcastMessage(clearMessage);
         ServerUtil.executeCommands(this.clearCommands, replacements);
     }
 
     public void tick() {
-        if(interval <= 0) return;
+        if (interval <= 0) return;
         this.tickCount++;
-        if(this.tickCount == this.interval) {
+        if (this.tickCount == this.interval) {
             this.tickCount = 0;
-            NeoClear.inst().getServer().executeSync(this::doClear);
+            ScheduleManager.executeSync(this::doClear);
             return;
         }
-        if(!intervalMessages.isEmpty()) {
-            String message = intervalMessages.get(this.interval - this.tickCount);
-            if(message != null) ServerUtil.sendMessage(message);
+        if (!this.intervalMessages.isEmpty()) {
+            String message = this.intervalMessages.get(this.interval - this.tickCount);
+            if (message != null) ServerUtil.broadcastMessage(message);
         }
-        if(!intervalCommands.isEmpty()) {
-            List<String> commands = intervalCommands.get(this.interval - this.tickCount);
-            if(commands != null) ServerUtil.executeCommands(commands, null);
+        if (!this.intervalCommands.isEmpty()) {
+            List<String> commands = this.intervalCommands.get(this.interval - this.tickCount);
+            if (commands != null) ServerUtil.executeCommands(commands, null);
         }
     }
 }

@@ -1,9 +1,9 @@
 package me.neovitalism.neoclear.util;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import me.neovitalism.neoapi.NeoAPI;
 import me.neovitalism.neoapi.utils.ColorUtil;
-import me.neovitalism.neoclear.NeoClear;
-import net.minecraft.server.MinecraftServer;
+import me.neovitalism.neoapi.utils.CommandUtil;
+import me.neovitalism.neoapi.utils.StringUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -15,26 +15,11 @@ public class ServerUtil {
         ServerUtil.prefix = prefix;
     }
 
-    public static void sendMessage(String message) {
-        NeoClear.inst().adventure().all().sendMessage(ColorUtil.parseColour(prefix + message));
-    }
-
-    public static void log(String message) {
-        NeoClear.inst().adventure().console().sendMessage(ColorUtil.parseColour(prefix + message));
+    public static void broadcastMessage(String message) {
+        NeoAPI.adventure().all().sendMessage(ColorUtil.parseColour(ServerUtil.prefix + message));
     }
 
     public static void executeCommands(List<String> commands, Map<String, String> replacements) {
-        for(String command : commands) {
-            String toExecute = command;
-            if(replacements != null) {
-                for (Map.Entry<String, String> replacement : replacements.entrySet()) {
-                    toExecute = toExecute.replace(replacement.getKey(), replacement.getValue());
-                }
-            }
-            MinecraftServer server = NeoClear.inst().getServer();
-            try {
-                server.getCommandFunctionManager().getDispatcher().execute(toExecute, server.getCommandSource());
-            } catch (CommandSyntaxException ignored) {}
-        }
+        for (String command : commands) CommandUtil.executeServerCommand(StringUtil.replaceReplacements(command, replacements));
     }
 }

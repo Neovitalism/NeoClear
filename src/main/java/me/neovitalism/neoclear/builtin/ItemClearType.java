@@ -1,11 +1,11 @@
 package me.neovitalism.neoclear.builtin;
 
-import me.neovitalism.neoapi.modloading.config.Configuration;
+import me.neovitalism.neoapi.config.Configuration;
+import me.neovitalism.neoapi.helpers.ItemHelper;
 import me.neovitalism.neoclear.api.cleartypes.ClearType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 
 import java.util.List;
@@ -17,9 +17,7 @@ public class ItemClearType extends ClearType<ItemEntity> {
 
     @Override
     public boolean isWhitelisted(ItemEntity itemEntity) {
-        Identifier itemID = Registries.ITEM.getId(itemEntity.getStack().getItem());
-        String stringID = itemID.toString();
-        return this.whitelist.contains(stringID);
+        return this.whitelist.contains(ItemHelper.getIdentifier(itemEntity.getStack().getItem()).toString());
     }
 
     @Override
@@ -27,13 +25,13 @@ public class ItemClearType extends ClearType<ItemEntity> {
         long clearCount = 0;
         for (ServerWorld world : worlds) {
             List<? extends ItemEntity> entities = world.getEntitiesByType(TypeFilter.instanceOf(ItemEntity.class), entity -> {
-                if(entity == null) return false;
-                if(!entity.isAlive()) return false;
-                if(entity.hasCustomName()) return false;
-                if(entity.getStack().getSubNbt("display") != null) return false;
-                return !isWhitelisted(entity);
+                if (entity == null) return false;
+                if (!entity.isAlive()) return false;
+                if (entity.hasCustomName()) return false;
+                if (entity.getStack().get(DataComponentTypes.ITEM_NAME) != null) return false;
+                return !this.isWhitelisted(entity);
             });
-            for(ItemEntity entity : entities) {
+            for (ItemEntity entity : entities) {
                 entity.discard();
                 clearCount++;
             }
