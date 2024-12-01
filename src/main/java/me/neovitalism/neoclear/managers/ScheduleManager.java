@@ -6,7 +6,6 @@ import me.neovitalism.neoapi.config.Configuration;
 import me.neovitalism.neoclear.NeoClear;
 import me.neovitalism.neoclear.api.cleartypes.ClearType;
 import me.neovitalism.neoclear.api.cleartypes.ClearTypeRegistry;
-import me.neovitalism.neoclear.util.ServerUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

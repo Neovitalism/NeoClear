@@ -29,7 +29,7 @@ public abstract class ClearType<T> {
         if (messageSection != null) {
             for (String key : messageSection.getKeys()) {
                 if (key.equals("on-clear")) continue;
-                long seconds = TimeUtil.tryParse(key);
+                long seconds = TimeUtil.parseSeconds(key);
                 if (seconds == -1) continue;
                 this.intervalMessages.put(seconds, messageSection.getString(key));
             }
@@ -39,7 +39,7 @@ public abstract class ClearType<T> {
         if (commandSection != null) {
             for (String key : commandSection.getKeys()) {
                 if (key.equals("on-clear")) continue;
-                long seconds = TimeUtil.tryParse(key);
+                long seconds = TimeUtil.parseSeconds(key);
                 if (seconds == -1) continue;
                 this.intervalCommands.put(seconds, commandSection.getStringList(key));
             }
