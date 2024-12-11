@@ -40,10 +40,10 @@ public class EntityClearType extends ClearType<Entity> {
         long clearCount = 0;
         for (ServerWorld world : worlds) {
             List<? extends MobEntity> entities = world.getEntitiesByType(TypeFilter.instanceOf(MobEntity.class), entity -> {
-                if(entity == null) return false;
-                if(!entity.isAlive()) return false;
-                if(entity.isPersistent()) return false;
-                if(entity.hasCustomName()) return false;
+                if (entity == null) return false;
+                if (!entity.isAlive()) return false;
+                if (entity.isPersistent()) return false;
+                if (entity.hasCustomName()) return false;
                 return !this.isWhitelisted(entity);
             });
             for (LivingEntity entity : entities) {
