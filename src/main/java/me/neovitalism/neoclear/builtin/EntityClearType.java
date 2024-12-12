@@ -29,10 +29,10 @@ public class EntityClearType extends ClearType<Entity> {
 
     @Override
     public boolean isWhitelisted(Entity entity) {
-        Identifier entityID = Registries.ENTITY_TYPE.getId(entity.getType());
-        String stringID = entityID.toString();
-        if (EntityClearType.IGNORED_ENTITY_TYPES.contains(stringID)) return true;
-        return this.whitelist.contains(stringID);
+        Identifier identifier = Registries.ENTITY_TYPE.getId(entity.getType());
+        if (EntityClearType.IGNORED_ENTITY_TYPES.contains(identifier.toString())) return true;
+        if (this.whitelist.contains(identifier.getNamespace() + ":*")) return true;
+        return this.whitelist.contains(identifier.toString());
     }
 
     @Override

@@ -6,6 +6,7 @@ import me.neovitalism.neoclear.api.cleartypes.ClearType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 
 import java.util.List;
@@ -17,7 +18,9 @@ public class ItemClearType extends ClearType<ItemEntity> {
 
     @Override
     public boolean isWhitelisted(ItemEntity itemEntity) {
-        return this.whitelist.contains(ItemHelper.getIdentifier(itemEntity.getStack().getItem()).toString());
+        Identifier identifier = ItemHelper.getIdentifier(itemEntity.getStack().getItem());
+        if (this.whitelist.contains(identifier.getNamespace() + ":*")) return true;
+        return this.whitelist.contains(identifier.toString());
     }
 
     @Override
