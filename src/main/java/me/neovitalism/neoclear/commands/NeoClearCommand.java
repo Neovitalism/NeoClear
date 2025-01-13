@@ -28,7 +28,7 @@ public class NeoClearCommand extends ReloadCommand {
 
     @Override
     public LiteralArgumentBuilder<ServerCommandSource> getCommand(LiteralArgumentBuilder<ServerCommandSource> command) {
-        return command.then(literal("clear")
+        return super.getCommand(command).then(literal("clear")
                 .requires(NeoPermission.of("neoclear.clear")::matches)
                 .then(argument("type", StringArgumentType.string())
                         .suggests((context, builder) -> new SuggestionProviders.List("type",
