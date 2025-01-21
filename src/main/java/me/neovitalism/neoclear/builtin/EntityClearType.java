@@ -44,6 +44,8 @@ public class EntityClearType extends ClearType<Entity> {
                 if (!entity.isAlive()) return false;
                 if (entity.isPersistent()) return false;
                 if (entity.hasCustomName()) return false;
+                if (entity.getVehicle() != null) return false;
+                if (entity.isLeashed()) return false;
                 return !this.isWhitelisted(entity);
             });
             for (LivingEntity entity : entities) {

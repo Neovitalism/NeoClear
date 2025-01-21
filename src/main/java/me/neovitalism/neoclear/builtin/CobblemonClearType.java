@@ -49,6 +49,8 @@ public class CobblemonClearType extends ClearType<PokemonEntity> {
                 if (pokemon.isBusy()) continue;
                 if (pokemon.getOwnerUuid() != null) continue;
                 if (pokemon.getTethering() != null) continue;
+                if (pokemon.getVehicle() != null) continue;
+                if (pokemon.isLeashed()) continue;
                 if (this.isWhitelisted(pokemon)) continue;
                 pokemon.setQueuedToDespawn(true);
                 clearCount++;
