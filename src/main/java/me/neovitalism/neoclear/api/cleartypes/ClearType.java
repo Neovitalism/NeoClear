@@ -2,6 +2,7 @@ package me.neovitalism.neoclear.api.cleartypes;
 
 import me.neovitalism.neoapi.NeoAPI;
 import me.neovitalism.neoapi.config.Configuration;
+import me.neovitalism.neoapi.utils.StringUtil;
 import me.neovitalism.neoapi.utils.TimeUtil;
 import me.neovitalism.neoclear.managers.ScheduleManager;
 import me.neovitalism.neoclear.util.ServerUtil;
@@ -67,11 +68,10 @@ public abstract class ClearType<T> {
         replacements.put("{interval}", String.valueOf(this.interval));
         replacements.put("{interval-formatted}", TimeUtil.getFormattedTime(this.interval));
         replacements.put("{amount}", String.valueOf(amountCleared));
-        String clearMessage = this.clearMessage;
-        for (Map.Entry<String, String> replacement : replacements.entrySet()) {
-            clearMessage = clearMessage.replace(replacement.getKey(), replacement.getValue());
+        if (this.clearMessage != null && !this.clearMessage.isEmpty()) {
+            String clearMessage = StringUtil.replaceReplacements(this.clearMessage, replacements);
+            ServerUtil.broadcastMessage(clearMessage);
         }
-        ServerUtil.broadcastMessage(clearMessage);
         ServerUtil.executeCommands(this.clearCommands, replacements);
     }
 
