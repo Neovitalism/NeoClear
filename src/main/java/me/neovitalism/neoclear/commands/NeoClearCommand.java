@@ -13,9 +13,6 @@ import me.neovitalism.neoclear.api.cleartypes.ClearType;
 import me.neovitalism.neoclear.managers.ScheduleManager;
 import net.minecraft.server.command.ServerCommandSource;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
-
 public class NeoClearCommand extends ReloadCommand {
     public NeoClearCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         super(NeoClear.inst(), dispatcher, "neoclear");
@@ -23,7 +20,7 @@ public class NeoClearCommand extends ReloadCommand {
 
     @Override
     public NeoPermission[] getBasePermissions() {
-        return NeoPermission.add(this.reloadPermission, "neoclear.clear");
+        return NeoPermission.add(super.getBasePermissions(), "neoclear.clear");
     }
 
     @Override
