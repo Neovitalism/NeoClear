@@ -4,6 +4,7 @@ import me.neovitalism.neoapi.NeoAPI;
 import me.neovitalism.neoapi.utils.ColorUtil;
 import me.neovitalism.neoapi.utils.CommandUtil;
 import me.neovitalism.neoapi.utils.StringUtil;
+import me.neovitalism.neoclear.managers.ScheduleManager;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ public class ServerUtil {
     }
 
     public static void executeCommands(List<String> commands, Map<String, String> replacements) {
-        for (String command : commands) CommandUtil.executeServerCommand(StringUtil.replaceReplacements(command, replacements));
+        ScheduleManager.executeSync(() -> {
+            for (String command : commands) CommandUtil.executeServerCommand(StringUtil.replaceReplacements(command, replacements));
+        });
     }
 }
