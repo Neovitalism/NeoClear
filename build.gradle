@@ -1,10 +1,7 @@
 plugins {
-    id 'fabric-loom' version '1.8-SNAPSHOT'
-    id 'org.jetbrains.kotlin.jvm' version "2.0.0"
+    id 'fabric-loom' version '1.11-SNAPSHOT'
+    id 'org.jetbrains.kotlin.jvm' version "2.2.0"
 }
-
-sourceCompatibility = JavaVersion.VERSION_21
-targetCompatibility = JavaVersion.VERSION_21
 
 version = "${project.mod_version}"
 group = "${project.maven_group}"
@@ -23,7 +20,7 @@ dependencies {
     implementation 'net.kyori:adventure-text-minimessage:4.17.0'
     modImplementation 'net.kyori:adventure-platform-fabric:5.14.1'
     modImplementation include("me.neovitalism:NeoAPI:${project.neo_api_version}")
-    modImplementation "com.cobblemon:fabric:1.6.0+1.21.1-SNAPSHOT"
+    modImplementation "com.cobblemon:fabric:${project.cobblemon_version}+1.21.1-SNAPSHOT"
     compileOnly 'net.luckperms:api:5.4'
 }
 
@@ -32,6 +29,7 @@ resourceProperties.put("version", (String) project.version)
 resourceProperties.put("loader_version", project.loader_version)
 resourceProperties.put("minecraft_version", project.minecraft_version)
 resourceProperties.put("neo_api_version", project.neo_api_version)
+resourceProperties.put("cobblemon_version", project.cobblemon_version)
 
 processResources {
     filesMatching("fabric.mod.json") {

@@ -32,6 +32,6 @@
 
   "suggests": {
     "luckperms": ">=5.4.139",
-    "cobblemon": ">=1.6.0"
+    "cobblemon": ">=${cobblemon_version}"
   }
 }

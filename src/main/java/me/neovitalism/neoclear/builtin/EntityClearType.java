@@ -23,8 +23,11 @@ public class EntityClearType extends ClearType<Entity> {
         IGNORED_ENTITY_TYPES.add("taterzens:npc");
     }
 
+    private final boolean includesPassengers;
+
     public EntityClearType(Configuration config) {
         super(config);
+        this.includesPassengers = config.getBoolean("includes-passengers", true);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class EntityClearType extends ClearType<Entity> {
                 if (!entity.isAlive()) return false;
                 if (entity.isPersistent()) return false;
                 if (entity.hasCustomName()) return false;
-                if (entity.getVehicle() != null) return false;
+                if (!this.includesPassengers && entity.getVehicle() != null) return false;
                 if (entity.isLeashed()) return false;
                 return !this.isWhitelisted(entity);
             });

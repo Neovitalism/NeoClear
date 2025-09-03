@@ -14,6 +14,8 @@ public class CobblemonClearType extends ClearType<PokemonEntity> {
     private final List<String> whitelistedTags = new ArrayList<>();
     private final List<PokemonProperties> whitelistedSpecs = new ArrayList<>();
 
+    private final boolean includesPassengers;
+
     public CobblemonClearType(Configuration config) {
         super(config);
         for (String whitelistEntry : this.whitelist) {
@@ -25,6 +27,7 @@ public class CobblemonClearType extends ClearType<PokemonEntity> {
                 this.whitelistedSpecs.add(properties);
             }
         }
+        this.includesPassengers = config.getBoolean("includes-passengers", true);
     }
 
     @Override
@@ -49,7 +52,7 @@ public class CobblemonClearType extends ClearType<PokemonEntity> {
                 if (pokemon.isBusy()) continue;
                 if (pokemon.getOwnerUuid() != null) continue;
                 if (pokemon.getTethering() != null) continue;
-                if (pokemon.getVehicle() != null) continue;
+                if (!this.includesPassengers && pokemon.getVehicle() != null) continue;
                 if (pokemon.isLeashed()) continue;
                 if (this.isWhitelisted(pokemon)) continue;
                 pokemon.setQueuedToDespawn(true);
