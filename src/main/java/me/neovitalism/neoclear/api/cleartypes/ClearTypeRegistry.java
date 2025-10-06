@@ -1,5 +1,6 @@
 package me.neovitalism.neoclear.api.cleartypes;
 
+import me.neovitalism.neoapi.utils.ServerUtil;
 import me.neovitalism.neoclear.NeoClear;
 import me.neovitalism.neoclear.builtin.CobblemonClearType;
 import me.neovitalism.neoclear.builtin.EntityClearType;
@@ -21,11 +22,10 @@ public class ClearTypeRegistry {
     }
 
     public static void registerDefaults(NeoClear instance) {
-        try {
-            Class.forName("com.cobblemon.mod.common.Cobblemon");
+        if (ServerUtil.isModLoaded("cobblemon")) {
             ClearTypeRegistry.register("COBBLEMON", CobblemonClearType.class);
             instance.getLogger().info("Hooked into Cobblemon!");
-        } catch (ClassNotFoundException ignored) {}
+        }
         ClearTypeRegistry.register("ENTITY", EntityClearType.class);
         ClearTypeRegistry.register("ITEM", ItemClearType.class);
     }

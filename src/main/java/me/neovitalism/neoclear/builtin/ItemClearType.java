@@ -30,6 +30,7 @@ public class ItemClearType extends ClearType<ItemEntity> {
             List<? extends ItemEntity> entities = world.getEntitiesByType(TypeFilter.instanceOf(ItemEntity.class), entity -> {
                 if (entity == null) return false;
                 if (!entity.isAlive()) return false;
+                if (entity.getItemAge() == -32768) return false;
                 if (entity.hasCustomName()) return false;
                 if (entity.getStack().get(DataComponentTypes.ITEM_NAME) != null) return false;
                 return !this.isWhitelisted(entity);

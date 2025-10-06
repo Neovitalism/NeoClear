@@ -1,6 +1,6 @@
 plugins {
     id 'fabric-loom' version '1.11-SNAPSHOT'
-    id 'org.jetbrains.kotlin.jvm' version "2.2.0"
+    id 'org.jetbrains.kotlin.jvm' version "2.0.0"
 }
 
 version = "${project.mod_version}"
@@ -20,7 +20,7 @@ dependencies {
     implementation 'net.kyori:adventure-text-minimessage:4.17.0'
     modImplementation 'net.kyori:adventure-platform-fabric:5.14.1'
     modImplementation include("me.neovitalism:NeoAPI:${project.neo_api_version}")
-    modImplementation "com.cobblemon:fabric:${project.cobblemon_version}+1.21.1-SNAPSHOT"
+    modImplementation "com.cobblemon:fabric:${project.cobblemon_version}+1.21.1"
     compileOnly 'net.luckperms:api:5.4'
 }
 
