@@ -20,7 +20,7 @@ dependencies {
     implementation 'net.kyori:adventure-text-minimessage:4.17.0'
     modImplementation 'net.kyori:adventure-platform-fabric:5.14.1'
     modImplementation include("me.neovitalism:NeoAPI:${project.neo_api_version}")
-    modImplementation "com.cobblemon:fabric:${project.cobblemon_version}+1.21.1"
+    modImplementation "com.cobblemon:fabric:${project.cobblemon_version}+1.21.1-SNAPSHOT"
     compileOnly 'net.luckperms:api:5.4'
 }
 
